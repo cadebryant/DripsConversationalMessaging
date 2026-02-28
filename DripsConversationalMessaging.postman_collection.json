@@ -1,0 +1,235 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "DripsConversationalMessaging API",
+    "description": "Postman collection for the DripsConversationalMessaging .NET 10 Minimal API. Run order: Ingest Interested → Confused → Frustrated → OptOut → Get Priority.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:7051",
+      "type": "string"
+    },
+    {
+      "key": "frustratedConversationId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Messages",
+      "item": [
+        {
+          "name": "Ingest - Interested",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201 Created', () => { pm.response.to.have.status(201); });",
+                  "pm.test('Response has id and conversationId', () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('id').that.is.a('string');",
+                  "    pm.expect(json).to.have.property('conversationId').that.is.a('string');",
+                  "});",
+                  "pm.test('Intent is Interested (0)', () => { pm.expect(pm.response.json().intent).to.eql(0); });",
+                  "pm.test('Location header is set', () => { pm.expect(pm.response.headers.get('Location')).to.include('/api/messages/'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"contactPhone\": \"+15551234567\",\n  \"sender\": \"agent@drips.com\",\n  \"body\": \"Hi, this sounds great and I am very interested in learning more!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/messages/ingest",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "messages", "ingest" ]
+            }
+          }
+        },
+        {
+          "name": "Ingest - Confused",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201 Created', () => { pm.response.to.have.status(201); });",
+                  "pm.test('Response has id and conversationId', () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('id').that.is.a('string');",
+                  "    pm.expect(json).to.have.property('conversationId').that.is.a('string');",
+                  "});",
+                  "pm.test('Intent is Confused (1)', () => { pm.expect(pm.response.json().intent).to.eql(1); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"contactPhone\": \"+15559876543\",\n  \"sender\": \"agent@drips.com\",\n  \"body\": \"I'm not sure what this means, I'm a bit confused about the whole process.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/messages/ingest",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "messages", "ingest" ]
+            }
+          }
+        },
+        {
+          "name": "Ingest - Frustrated (flags HighPriority)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201 Created', () => { pm.response.to.have.status(201); });",
+                  "pm.test('Response has id and conversationId', () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('id').that.is.a('string');",
+                  "    pm.expect(json).to.have.property('conversationId').that.is.a('string');",
+                  "});",
+                  "pm.test('Intent is Frustrated (2)', () => { pm.expect(pm.response.json().intent).to.eql(2); });",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('frustratedConversationId', json.conversationId);",
+                  "console.log('Saved frustratedConversationId:', json.conversationId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"contactPhone\": \"+15550001111\",\n  \"sender\": \"agent@drips.com\",\n  \"body\": \"This is absolutely terrible, I am so angry with this service!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/messages/ingest",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "messages", "ingest" ]
+            }
+          }
+        },
+        {
+          "name": "Ingest - OptOut",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201 Created', () => { pm.response.to.have.status(201); });",
+                  "pm.test('Response has id and conversationId', () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('id').that.is.a('string');",
+                  "    pm.expect(json).to.have.property('conversationId').that.is.a('string');",
+                  "});",
+                  "pm.test('Intent is OptOut (3)', () => { pm.expect(pm.response.json().intent).to.eql(3); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"contactPhone\": \"+15552223333\",\n  \"sender\": \"agent@drips.com\",\n  \"body\": \"Please stop messaging me, I want to unsubscribe from all communications.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/messages/ingest",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "messages", "ingest" ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Conversations",
+      "item": [
+        {
+          "name": "Get Priority Conversations",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 OK', () => { pm.response.to.have.status(200); });",
+                  "pm.test('Response is an array', () => { pm.expect(pm.response.json()).to.be.an('array'); });",
+                  "pm.test('All conversations have isHighPriority: true', () => {",
+                  "    pm.response.json().forEach(conv => {",
+                  "        pm.expect(conv.isHighPriority).to.be.true;",
+                  "    });",
+                  "});",
+                  "pm.test('Each conversation includes its messages array', () => {",
+                  "    pm.response.json().forEach(conv => {",
+                  "        pm.expect(conv).to.have.property('messages').that.is.an('array');",
+                  "    });",
+                  "});",
+                  "const frustratedId = pm.collectionVariables.get('frustratedConversationId');",
+                  "if (frustratedId) {",
+                  "    pm.test('Frustrated conversation is present in results', () => {",
+                  "        const ids = pm.response.json().map(c => c.id);",
+                  "        pm.expect(ids).to.include(frustratedId);",
+                  "    });",
+                  "} else {",
+                  "    console.warn('frustratedConversationId not set - run Ingest Frustrated first.');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/conversations/priority",
+              "host": [ "{{baseUrl}}" ],
+              "path": [ "api", "conversations", "priority" ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
