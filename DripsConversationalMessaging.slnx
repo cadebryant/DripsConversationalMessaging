@@ -5,4 +5,5 @@
   </Project>
   <Project Path="DripsConversationalMessaging.Server/DripsConversationalMessaging.Server.csproj" />
   <Project Path="DripsConversationalMessaging.ServiceDefaults/DripsConversationalMessaging.ServiceDefaults.csproj" />
+  <Project Path="DripsConversationalMessaging.Tests/DripsConversationalMessaging.Tests.csproj" />
 </Solution>
