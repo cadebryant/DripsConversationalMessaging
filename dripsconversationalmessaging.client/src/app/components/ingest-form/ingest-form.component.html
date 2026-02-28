@@ -1,0 +1,60 @@
+<section class="ingest-container">
+  <header>
+    <h2>Ingest Message</h2>
+    <p class="subtitle">Submit an inbound customer message for AI intent classification.</p>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="field">
+      <label for="contactPhone">Contact Phone</label>
+      <input id="contactPhone" type="tel" formControlName="contactPhone"
+             placeholder="e.g. 5551234567" autocomplete="tel" />
+      @if (form.get('contactPhone')?.invalid && form.get('contactPhone')?.touched) {
+        <span class="field-error">Enter a valid phone number (7–15 digits).</span>
+      }
+    </div>
+
+    <div class="field">
+      <label for="sender">Sender</label>
+      <input id="sender" type="text" formControlName="sender"
+             placeholder="Agent or system name" autocomplete="off" />
+      @if (form.get('sender')?.invalid && form.get('sender')?.touched) {
+        <span class="field-error">Sender is required.</span>
+      }
+    </div>
+
+    <div class="field">
+      <label for="body">
+        Message Body
+        <span class="char-count">{{ form.get('body')?.value?.length ?? 0 }}/1000</span>
+      </label>
+      <textarea id="body" formControlName="body" rows="5"
+                placeholder="Customer message…"></textarea>
+      @if (form.get('body')?.invalid && form.get('body')?.touched) {
+        <span class="field-error">Message body is required (max 1000 chars).</span>
+      }
+    </div>
+
+    <button type="submit" class="btn-primary" [disabled]="form.invalid || messaging.submitting()">
+      @if (messaging.submitting()) { Sending… } @else { Send Message }
+    </button>
+  </form>
+
+  @if (messaging.ingestError()) {
+    <div class="alert alert-error" role="alert">{{ messaging.ingestError() }}</div>
+  }
+
+  @if (messaging.lastMessage(); as msg) {
+    <div class="result-card" role="region" aria-label="Ingest result">
+      <h3>Message Ingested</h3>
+      <dl class="result-grid">
+        <dt>Intent</dt>
+        <dd><span class="badge intent-{{ msg.intent.toLowerCase() }}">{{ msg.intent }}</span></dd>
+        <dt>Message ID</dt>
+        <dd class="mono">{{ msg.id }}</dd>
+        <dt>Received</dt>
+        <dd>{{ msg.receivedAt | date:'medium' }}</dd>
+      </dl>
+    </div>
+  }
+</section>

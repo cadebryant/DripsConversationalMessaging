@@ -4,9 +4,7 @@ const target = env["services__dripsconversationalmessaging-server__https__0"] ??
 
 const PROXY_CONFIG = [
   {
-    context: [
-      "/weatherforecast",
-    ],
+    context: ["/api"],
     target,
     secure: false
   }

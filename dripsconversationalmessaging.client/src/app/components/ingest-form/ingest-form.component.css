@@ -1,0 +1,78 @@
+.ingest-container {
+  max-width: 560px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.field label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.char-count {
+  font-weight: 400;
+  color: var(--color-muted);
+}
+
+.field input,
+.field textarea {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition: border-color 0.15s;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+.field-error {
+  font-size: 0.8125rem;
+  color: var(--color-frustrated);
+}
+
+.result-card {
+  margin-top: 24px;
+  padding: 16px 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+}
+
+.result-card h3 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 6px 16px;
+  margin: 0;
+}
+
+.result-grid dt {
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+  align-self: center;
+}
+
+.result-grid dd {
+  margin: 0;
+  align-self: center;
+}

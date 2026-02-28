@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using DripsConversationalMessaging.Server.Data;
 using DripsConversationalMessaging.Server.Endpoints;
 using DripsConversationalMessaging.Server.Services;
@@ -15,6 +17,12 @@ builder.Services.AddDbContext<MessagingDbContext>(options =>
     options.UseInMemoryDatabase("MessagingDb"));
 
 builder.Services.AddScoped<IConversationService, ConversationService>();
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 // ── AI Intent Analysis ────────────────────────────────────────────────────────
 // Option A: Ollama (local, free). Install Ollama, then: ollama pull llama3.2

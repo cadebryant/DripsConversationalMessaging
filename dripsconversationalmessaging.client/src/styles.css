@@ -1,1 +1,125 @@
-/* You can add global styles to this file, and also import other style files */
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
+:root {
+  --color-bg:          #f8f9fa;
+  --color-surface:     #ffffff;
+  --color-border:      #e2e8f0;
+  --color-text:        #1a202c;
+  --color-muted:       #718096;
+  --color-accent:      #4f46e5;
+
+  --color-interested:  #22c55e;
+  --color-confused:    #f59e0b;
+  --color-frustrated:  #ef4444;
+  --color-optout:      #6b7280;
+}
+
+/* ── Reset ─────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+h2 { margin: 0 0 4px; font-size: 1.375rem; }
+h3 { margin: 0 0 8px; font-size: 1.0625rem; }
+
+/* ── Shared utilities ───────────────────────────────────────────────────────── */
+.subtitle {
+  margin: 0 0 20px;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.mono {
+  font-family: 'Courier New', monospace;
+  font-size: 0.8125rem;
+  word-break: break-all;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────────────── */
+.btn-primary, .btn-secondary {
+  padding: 9px 20px;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: opacity 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Treat plain <button> in forms as primary by default */
+form button[type="submit"] {
+  composes: btn-primary;
+  padding: 9px 20px;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+form button[type="submit"]:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── Alerts ─────────────────────────────────────────────────────────────────── */
+.alert {
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  margin: 16px 0 0;
+}
+
+.alert-error {
+  background: color-mix(in srgb, var(--color-frustrated) 12%, transparent);
+  color: var(--color-frustrated);
+  border: 1px solid color-mix(in srgb, var(--color-frustrated) 30%, transparent);
+}
+
+/* ── Intent badges ──────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.intent-interested  { background: color-mix(in srgb, var(--color-interested) 18%, transparent);  color: #15803d; }
+.intent-confused    { background: color-mix(in srgb, var(--color-confused)   18%, transparent);  color: #b45309; }
+.intent-frustrated  { background: color-mix(in srgb, var(--color-frustrated) 15%, transparent);  color: #b91c1c; }
+.intent-optout      { background: color-mix(in srgb, var(--color-optout)     18%, transparent);  color: #374151; }
+.badge-opted-out    { background: color-mix(in srgb, var(--color-optout)     18%, transparent);  color: #374151; }
