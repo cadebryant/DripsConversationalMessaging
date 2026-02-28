@@ -5,27 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DripsConversationalMessaging.Server.Services;
 
-public class ConversationService(MessagingDbContext db, ILogger<ConversationService> logger) : IConversationService
+public class ConversationService(
+    MessagingDbContext db,
+    IIntentAnalyzer intentAnalyzer,
+    ILogger<ConversationService> logger) : IConversationService
 {
-    private static readonly string[] OptOutKeywords =
-        ["stop", "unsubscribe"];
-
-    private static readonly string[] FrustratedKeywords =
-        ["angry", "frustrated", "terrible", "awful", "horrible", "worst", "hate", "useless", "unacceptable", "ridiculous", "furious"];
-
-    private static readonly string[] ConfusedKeywords =
-        ["confused", "confusing", "unclear", "not sure", "don't understand", "what does", "how do"];
-
-    private static readonly string[] InterestedKeywords =
-        ["interested", "tell me more", "sounds good", "yes", "great", "awesome", "love", "want", "sign me up"];
-
     public async Task<Message> IngestMessageAsync(IngestMessageRequest request)
     {
         logger.LogInformation(
             "Ingesting message from {Sender} for contact {ContactPhone}",
             request.Sender, request.ContactPhone);
 
-        var intent = ClassifyIntent(request.Body);
+        var intent = await intentAnalyzer.AnalyzeAsync(request.Body);
 
         logger.LogInformation("Message classified with intent {Intent}", intent);
 
@@ -64,24 +55,5 @@ public class ConversationService(MessagingDbContext db, ILogger<ConversationServ
             .Include(c => c.Messages)
             .Where(c => c.IsHighPriority)
             .ToListAsync();
-    }
-
-    private static Intent ClassifyIntent(string body)
-    {
-        var lower = body.ToLowerInvariant();
-
-        if (OptOutKeywords.Any(kw => lower.Contains(kw)))
-            return Intent.OptOut;
-
-        if (FrustratedKeywords.Any(kw => lower.Contains(kw)))
-            return Intent.Frustrated;
-
-        if (ConfusedKeywords.Any(kw => lower.Contains(kw)))
-            return Intent.Confused;
-
-        if (InterestedKeywords.Any(kw => lower.Contains(kw)))
-            return Intent.Interested;
-
-        return Intent.Interested;
     }
 }

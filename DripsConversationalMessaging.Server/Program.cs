@@ -2,6 +2,8 @@ using DripsConversationalMessaging.Server.Data;
 using DripsConversationalMessaging.Server.Endpoints;
 using DripsConversationalMessaging.Server.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.AI;
+using OllamaSharp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,26 @@ builder.Services.AddDbContext<MessagingDbContext>(options =>
     options.UseInMemoryDatabase("MessagingDb"));
 
 builder.Services.AddScoped<IConversationService, ConversationService>();
+
+// ── AI Intent Analysis ────────────────────────────────────────────────────────
+// Option A: Ollama (local, free). Install Ollama, then: ollama pull llama3.2
+builder.Services.AddSingleton<IChatClient>(_ =>
+{
+    var ollama = new OllamaApiClient(
+        new Uri(builder.Configuration["Ollama:Endpoint"] ?? "http://localhost:11434"));
+    ollama.SelectedModel = builder.Configuration["Ollama:Model"] ?? "llama3.2";
+    return ollama;
+});
+
+// Option B: Azure OpenAI — install Microsoft.Extensions.AI.OpenAI, then swap the above for:
+// builder.Services.AddSingleton<IChatClient>(_ =>
+//     new AzureOpenAIClient(
+//         new Uri(builder.Configuration["AzureOpenAI:Endpoint"]!),
+//         new AzureKeyCredential(builder.Configuration["AzureOpenAI:Key"]!))
+//     .AsChatClient(builder.Configuration["AzureOpenAI:Deployment"]!));
+
+builder.Services.AddSingleton<IIntentAnalyzer, IntentAnalyzer>();
+// ─────────────────────────────────────────────────────────────────────────────
 
 var app = builder.Build();
 
