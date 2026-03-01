@@ -23,6 +23,7 @@ This repository contains a full-stack implementation of a Drips-style messaging 
 The solution is built as a cloud-native, distributed application leveraging the latest .NET and Angular ecosystems.
 
 * **Orchestration (.NET Aspire):** Centralized orchestration for the frontend, backend, and resources. It provides built-in service discovery and a real-time observability dashboard for logs and traces.
+    * Docker capablity is also supported by the inluded `Dockerfile` and `ci.yml` Github Action workflow, though the solution is designed to be run locally without requiring containerization.
 
 * **Backend (.NET 10 Minimal API):** A lightweight, high-performance API that handles message ingestion, persistence via EF Core, and business logic orchestration.
  
