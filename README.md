@@ -3,7 +3,7 @@
 This repository contains a full-stack implementation of a Drips-style messaging application, designed to help support teams identify and prioritize customer needs through automated sentiment analysis.
 
 ## Instructions for Running/Debugging Locally
-* Ensure that the latest version of .NET and Angular are installed.
+* Ensure .NET 10+, Node 23+, and Angular 21 are installed.
 * Set **DripsConversationalMessaging.Server** as the startup project.
 * Configure to run under **https**.
 * Press **F5** to run the server in Debug mode.
@@ -65,10 +65,10 @@ In alignment with Drips' values of leveraging AI-assisted tools responsibly, thi
 
 ## What I Would Improve with More Time
 
-* **Durable Messaging:** I would implement a message queue (such as Azure Service Bus) between the API ingestion and the Ollama analysis service to ensure the system remains resilient under heavy load.
+* **Asynchronous Messaging:** I would implement a message queue (such as Azure Service Bus) between the API ingestion and the Ollama analysis service to ensure the system remains resilient under heavy load.
 
 * **Persistent Storage:** Migrate from In-Memory to a PostgreSQL or SQL Server container within the Aspire AppHost to support data persistence across restarts.
 
 * **Real-time Updates:** Integrate **SignalR** to push "High Priority" alerts to the support agent's dashboard instantly without requiring a page refresh or polling.
 
-* **Advanced Observability:** Implement custom OpenTelemetry metrics to track "Intent Trends" over time, providing marketers with a macro-view of campaign health.
+* **Advanced Observability:** Implement Azure App Insights and custom OpenTelemetry metrics to track sentiment/intent trends over time, providing marketers with a macro-view of campaign health.
