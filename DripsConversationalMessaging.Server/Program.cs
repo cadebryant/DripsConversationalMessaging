@@ -65,16 +65,6 @@ app.MapConversationEndpoints();
 app.MapFallbackToFile("/index.html");
 
 // Add after var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/error-development");
-}
-else
-{
-    app.UseExceptionHandler("/error");
-}
-
-// Or, using the built-in Problem Details support (.NET 7+):
 app.UseExceptionHandler(exceptionHandlerApp =>
     exceptionHandlerApp.Run(async context =>
     {
