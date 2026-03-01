@@ -16,7 +16,7 @@ public static class ConversationEndpoints
         conversations.MapGet("/priority", GetHighPriorityAsync);
     }
 
-    private static async Task<Results<Created<Message>, BadRequest<string>>> IngestMessageAsync(
+    private static async Task<Results<Created<Message>, BadRequest<string>, StatusCodeHttpResult>> IngestMessageAsync(
         IngestMessageRequest request,
         IConversationService service,
         ILoggerFactory loggerFactory)
@@ -26,8 +26,16 @@ public static class ConversationEndpoints
             "POST /api/messages/ingest received for contact {ContactPhone}",
             request.ContactPhone);
 
-        var message = await service.IngestMessageAsync(request);
-        return TypedResults.Created($"/api/messages/{message.Id}", message);
+        try
+        {
+            var message = await service.IngestMessageAsync(request);
+            return TypedResults.Created($"/api/messages/{message.Id}", message);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Failed to ingest message for contact {ContactPhone}", request.ContactPhone);
+            return TypedResults.StatusCode(StatusCodes.Status500InternalServerError);
+        }
     }
 
     private static async Task<Ok<List<Conversation>>> GetHighPriorityAsync(

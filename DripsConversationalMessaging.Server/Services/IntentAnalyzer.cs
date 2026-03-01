@@ -27,26 +27,33 @@ public class IntentAnalyzer(IChatClient chatClient, ILogger<IntentAnalyzer> logg
     {
         logger.LogInformation("Sending message body to AI for intent classification");
 
-        var response = await chatClient.GetResponseAsync(
-            [
-                new ChatMessage(ChatRole.System, SystemPrompt),
-                new ChatMessage(ChatRole.User, messageBody)
-            ],
-            ClassificationOptions,
-            cancellationToken);
-
-        var classification = response.Text?.Trim() ?? string.Empty;
-
-        logger.LogInformation("AI returned intent classification: {Classification}", classification);
-
-        return classification.ToUpperInvariant() switch
+        try
         {
-            "INTERESTED"                        => Intent.Interested,
-            "CONFUSED"                          => Intent.Confused,
-            "FRUSTRATED"                        => Intent.Frustrated,
-            "OPTOUT" or "OPT OUT" or "OPT-OUT" => Intent.OptOut,
-            _                                   => ApplyKeywordFallback(messageBody, classification)
-        };
+            var response = await chatClient.GetResponseAsync(
+                [
+                    new ChatMessage(ChatRole.System, SystemPrompt),
+                    new ChatMessage(ChatRole.User, messageBody)
+                ],
+                ClassificationOptions,
+                cancellationToken);
+
+            var classification = response.Text?.Trim() ?? string.Empty;
+            logger.LogInformation("AI returned intent classification: {Classification}", classification);
+
+            return classification.ToUpperInvariant() switch
+            {
+                "INTERESTED"                        => Intent.Interested,
+                "CONFUSED"                          => Intent.Confused,
+                "FRUSTRATED"                        => Intent.Frustrated,
+                "OPTOUT" or "OPT OUT" or "OPT-OUT" => Intent.OptOut,
+                _                                   => ApplyKeywordFallback(messageBody, classification)
+            };
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "AI client failed. Falling back to keyword classification.");
+            return ApplyKeywordFallback(messageBody, string.Empty);
+        }
     }
 
     // Guards against malformed model output — prevents silent data loss

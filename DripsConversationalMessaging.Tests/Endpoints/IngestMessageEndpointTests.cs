@@ -1,6 +1,8 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using DripsConversationalMessaging.Server.Domain;
 using DripsConversationalMessaging.Server.Models;
 using DripsConversationalMessaging.Server.Services;
@@ -59,8 +61,14 @@ public class IngestMessageEndpointTests
         _serviceMock.Setup(s => s.IngestMessageAsync(It.IsAny<IngestMessageRequest>()))
             .ReturnsAsync(expected);
 
+        var jsonOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            Converters = { new JsonStringEnumConverter() }
+        };
+
         var response = await _client.PostAsJsonAsync("/api/messages/ingest", request);
-        var body = await response.Content.ReadFromJsonAsync<Message>();
+        var body = await response.Content.ReadFromJsonAsync<Message>(jsonOptions);
 
         Assert.Multiple(() =>
         {

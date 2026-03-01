@@ -3,6 +3,8 @@ using System.Text.Json.Serialization;
 using DripsConversationalMessaging.Server.Data;
 using DripsConversationalMessaging.Server.Endpoints;
 using DripsConversationalMessaging.Server.Services;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.AI;
 using OllamaSharp;
@@ -61,6 +63,41 @@ app.UseHttpsRedirection();
 app.MapConversationEndpoints();
 
 app.MapFallbackToFile("/index.html");
+
+// Add after var app = builder.Build();
+if (app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/error-development");
+}
+else
+{
+    app.UseExceptionHandler("/error");
+}
+
+// Or, using the built-in Problem Details support (.NET 7+):
+app.UseExceptionHandler(exceptionHandlerApp =>
+    exceptionHandlerApp.Run(async context =>
+    {
+        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+        if (exception is BadHttpRequestException badHttpEx)
+        {
+            context.Response.StatusCode = badHttpEx.StatusCode;
+            await context.Response.WriteAsJsonAsync(new ProblemDetails
+            {
+                Status = badHttpEx.StatusCode,
+                Title = badHttpEx.Message
+            });
+        }
+        else
+        {
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            await context.Response.WriteAsJsonAsync(new ProblemDetails
+            {
+                Status = 500,
+                Title = "An unexpected error occurred."
+            });
+        }
+    }));
 
 app.Run();
 

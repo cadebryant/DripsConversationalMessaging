@@ -43,17 +43,28 @@ public class ConversationService(
             Intent = intent
         };
 
-        db.Messages.Add(message);
-        await db.SaveChangesAsync();
+        try
+        {
+            db.Messages.Add(message);
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            logger.LogError(ex, "Failed to persist message for contact {ContactPhone}", request.ContactPhone);
+            throw;
+        }
 
         return message;
     }
 
     public async Task<List<Conversation>> GetHighPriorityConversationsAsync()
     {
-        return await db.Conversations
+        var results = await db.Conversations
             .Include(c => c.Messages)
             .Where(c => c.IsHighPriority)
             .ToListAsync();
+
+        logger.LogInformation("Returning {Count} high-priority conversations", results.Count);
+        return results;
     }
 }
