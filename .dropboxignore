@@ -1,0 +1,11 @@
+# Angular build artifacts
+dripsconversationalmessaging.client/.angular
+dripsconversationalmessaging.client/dist
+dripsconversationalmessaging.client/node_modules
+
+# .NET build artifacts
+**/bin
+**/obj
+
+# VS artifacts
+.vs

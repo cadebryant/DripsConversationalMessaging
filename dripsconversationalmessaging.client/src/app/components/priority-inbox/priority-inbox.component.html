@@ -37,7 +37,7 @@
         </div>
 
         @if (conv.messages.length > 0) {
-          <ul class="message-list" aria-label="Messages from {{ conv.contactPhone }}">
+          <ul class="message-list" [attr.aria-label]="'Messages from ' + conv.contactPhone">
             @for (msg of conv.messages; track msg.id) {
               <li class="message-row">
                 <span class="badge intent-{{ msg.intent.toLowerCase() }}">{{ msg.intent }}</span>
