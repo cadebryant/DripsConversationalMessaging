@@ -1,4 +1,4 @@
-# Drips Senior Full Stack Take-Home: Conversational Messaging Workspace
+# Drips-like Conversational Messaging Workspace
 
 This repository contains a full-stack implementation of a Drips-style messaging application, designed to help support teams identify and prioritize customer needs through automated sentiment analysis.
 
