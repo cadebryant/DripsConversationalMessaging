@@ -73,3 +73,4 @@ In alignment with Drips' values of leveraging AI-assisted tools responsibly, thi
 * **Real-time Updates:** Integrate **SignalR** to push "High Priority" alerts to the support agent's dashboard instantly without requiring a page refresh or polling.
 
 * **Advanced Observability:** Implement Azure App Insights and custom OpenTelemetry metrics to track sentiment/intent trends over time, providing marketers with a macro-view of campaign health.
+* **Infrastructure as Code:** Use Terraform or other IaC tools to automate the provisioning of cloud resources for dev, QA, UAT, and production deployment.
