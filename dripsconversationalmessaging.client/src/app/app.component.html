@@ -5,6 +5,17 @@
       <a routerLink="/ingest" routerLinkActive="active">Ingest Message</a>
       <a routerLink="/priority" routerLinkActive="active">Priority Inbox</a>
     </nav>
+    <button
+      class="theme-toggle"
+      role="switch"
+      [attr.aria-checked]="isDark()"
+      [attr.aria-label]="isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+      (click)="toggleTheme()">
+      <span class="toggle-icon">{{ isDark() ? '🌙' : '☀️' }}</span>
+      <span class="toggle-track">
+        <span class="toggle-thumb"></span>
+      </span>
+    </button>
   </header>
 
   <main class="app-main">

@@ -13,12 +13,26 @@
   --color-optout:      #6b7280;
 }
 
-/* ── Reset ─────────────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --color-bg:      #060c18;
+  --color-surface: #0c1a2e;
+  --color-border:  #1a3452;
+  --color-text:    #dce8f8;
+  --color-muted:   #7a99bb;
+  --color-accent:  #818cf8;
+}
+
+/* ── Reset
 *, *::before, *::after { box-sizing: border-box; }
+
+/* Browsers override font-family for interactive elements outside normal inheritance.
+   Force them all to use the body font (Inter). */
+a, label, button, input, textarea, select { font-family: inherit; }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   font-size: 16px;
   line-height: 1.5;
   background: var(--color-bg);
@@ -36,7 +50,7 @@ h3 { margin: 0 0 8px; font-size: 1.0625rem; }
 }
 
 .mono {
-  font-family: 'Courier New', monospace;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
   font-size: 0.8125rem;
   word-break: break-all;
 }
@@ -123,3 +137,9 @@ form button[type="submit"]:disabled {
 .intent-frustrated  { background: color-mix(in srgb, var(--color-frustrated) 15%, transparent);  color: #b91c1c; }
 .intent-optout      { background: color-mix(in srgb, var(--color-optout)     18%, transparent);  color: #374151; }
 .badge-opted-out    { background: color-mix(in srgb, var(--color-optout)     18%, transparent);  color: #374151; }
+
+[data-theme="dark"] .intent-interested { color: #4ade80; }
+[data-theme="dark"] .intent-confused   { color: #fbbf24; }
+[data-theme="dark"] .intent-frustrated { color: #f87171; }
+[data-theme="dark"] .intent-optout,
+[data-theme="dark"] .badge-opted-out   { color: #9ca3af; }
